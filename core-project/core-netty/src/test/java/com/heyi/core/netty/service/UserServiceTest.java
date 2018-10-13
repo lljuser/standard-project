@@ -202,7 +202,7 @@ public class UserServiceTest {
             String url= env.getProperty("dataSource.url");
             conn=DriverManager.getConnection(url,"hive","hivehive");
 
-            psmt=conn.prepareStatement("select * from t_user where id>?");
+            psmt=conn.prepareStatement("select * from t_user where id>? limit 0,10");
             psmt.setInt(1,1);
 
             rs=psmt.executeQuery();
