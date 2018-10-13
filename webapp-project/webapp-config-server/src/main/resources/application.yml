@@ -1,0 +1,22 @@
+server:
+  port: 8002
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://10.1.1.223/blockchain/blockchain-filesystem-config.git
+          username: llj
+          password: lljlljllj
+    bus:
+      enabled: true

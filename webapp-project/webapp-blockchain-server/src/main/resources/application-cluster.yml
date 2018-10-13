@@ -1,0 +1,9 @@
+swagger:
+  enable: false
+
+spring:
+  spring:
+    datasource:
+      username: hive
+      password: hivehive
+      url: jdbc:mysql://10.1.1.214:3306/fs_order?useUnicode=true&characterEncoding=utf-8

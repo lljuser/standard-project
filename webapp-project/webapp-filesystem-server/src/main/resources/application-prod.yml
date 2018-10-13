@@ -1,0 +1,30 @@
+swagger:
+  enable: false
+
+spring:
+  resources:
+    static-locations: file:///D:/temp/blockchain/web
+  datasource:
+    username: hive
+    password: hivehive
+    url: jdbc:mysql://10.1.1.214:3306/filestore?useUnicode=true&characterEncoding=utf-8
+
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+
+# 文件的保存路径
+app:
+  file:
+    rootPath: D:/temp/blockchain/files
+  # 排序节点及当前节点的外网可达域名及端口
+  endpoints:
+    # order web服务
+    order: localhost:8103
+    # 本地 web 服务
+    local: localhost:8103
+    # 区块链web服务
+    blockChain: localhost:8109
+    # order 区块链web服务
+    orderBlockChain: localhost:8109

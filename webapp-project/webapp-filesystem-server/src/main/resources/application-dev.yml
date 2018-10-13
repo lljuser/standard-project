@@ -1,0 +1,17 @@
+swagger:
+  enable: false
+
+# 文件的保存路径
+app:
+  file:
+    rootPath:
+  # 排序节点及当前节点的外网可达域名及端口
+  endpoints:
+    # order web服务
+    order: 10.1.3.155:8103
+    # 本地 web 服务
+    local: 10.1.3.155:8103
+    # 区块链web服务
+    blockChain: 10.1.3.155:8109
+    # 本地 区块链web服务
+    orderBlockChain: 10.1.3.155:8109
