@@ -17,6 +17,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
@@ -45,7 +46,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {AutoConfig.class})
 @Transactional
-@Rollback
+//@Rollback
+@ActiveProfiles("dev")
 public class UserServiceTest {
     private static final Log logger = LogFactory.getLog(UserServiceTest.class);
 
@@ -133,17 +135,20 @@ public class UserServiceTest {
 
     @Test
     //@Rollback(false)
-    public void insertUser(){
+    public void insertUser() throws Exception{
         String sql="insert into t_user(name,age,address,birthDay) values(?,?,?,?)";
 
         this.jdbcTemplate.update(sql,"mecity",20,"shenzhen","2010-1-1");
+        //this.jdbcTemplate.update(sql,"mecity1","sss","shenzhen","2010-1-1");
 
         List<Object[]> list=new ArrayList<>();
         list.add(new Object[]{"llj1",21,"shanghai","2010-1-1"});
         list.add(new Object[]{"llj2",21,"shanghai","2010-1-1"});
         list.add(new Object[]{"llj3",21,"shanghai","2010-1-1"});
-        list.add(new Object[]{"llj4",21,"shanghai","2010-1-1"});
+        //list.add(new Object[]{"llj4","sss","shanghai","2010-1-1-1"});
         this.jdbcTemplate.batchUpdate(sql,list);
+
+
     }
 
     @Test

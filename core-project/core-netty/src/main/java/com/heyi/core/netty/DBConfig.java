@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @PropertySource(value = {"classpath:dev/db.properties"})  //会自动注入Envoriment中
+@Profile("dev")
 public class DBConfig {
 
 

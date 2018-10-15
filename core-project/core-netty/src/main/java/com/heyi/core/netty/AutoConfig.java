@@ -2,23 +2,24 @@ package com.heyi.core.netty;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
+import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = {"com.heyi.core.netty"})
+@MapperScan(basePackages = "com.heyi.core.netty.repository")
+//@PropertySources({@PropertySource(""),@PropertySource("")})
 public class AutoConfig {
 
     private Properties getDBProperties(String profile) throws IOException {
@@ -62,5 +63,15 @@ public class AutoConfig {
     @Bean
     public DataSourceTransactionManager transactionManager(DataSource dataSource){
         return new DataSourceTransactionManager(dataSource);
+    }
+
+    @Bean
+    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource){
+        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+        factoryBean.setDataSource(dataSource);
+        org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        factoryBean.setConfiguration(configuration);
+        return factoryBean;
     }
 }
