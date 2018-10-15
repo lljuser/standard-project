@@ -26,7 +26,7 @@ import java.util.Date;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {AutoConfig.class})
-@ActiveProfiles("dev")
+@ActiveProfiles("prod")
 //@Transactional
 public class OgUserServiceTest {
 
