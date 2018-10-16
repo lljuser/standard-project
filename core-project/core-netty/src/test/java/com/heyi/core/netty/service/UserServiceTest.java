@@ -1,6 +1,6 @@
 package com.heyi.core.netty.service;
 
-import com.alibaba.druid.pool.DruidDataSource;
+
 import com.heyi.core.netty.AutoConfig;
 import com.heyi.core.netty.DBConfig;
 import com.heyi.core.netty.MyConfig;
@@ -9,10 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.*;
 import org.junit.runner.RunWith;
-import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,20 +19,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-
-import static org.junit.Assert.*;
 
 /**
  * @描述 com.heyi.core.netty.service
@@ -45,7 +38,7 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {AutoConfig.class})
-@Transactional
+@Transactional(propagation = Propagation.REQUIRED,isolation = Isolation.READ_COMMITTED)
 //@Rollback
 @ActiveProfiles("dev")
 public class UserServiceTest {

@@ -1,6 +1,5 @@
 package com.heyi.core.netty.domain;
 
-import javax.persistence.Column;
 import java.util.Date;
 
 /**

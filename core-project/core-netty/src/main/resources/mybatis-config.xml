@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <setting name="cacheEnabled" value="true" />
+        <setting name="lazyLoadingEnabled" value="true" />
+        <setting name="returnInstanceForEmptyRow" value="false" />
+        <setting name="logPrefix" value="dao." />
+        <!--mybatis 映射实体对象驼峰字段-->
+        <setting name="mapUnderscoreToCamelCase" value="true" />
+        <setting name="logImpl" value="LOG4J" />
+    </settings>
+
+    <typeAliases>
+        <!-- 所有用到的实体类无需填写 主要简化命名空间 实体类注解@Alias-->
+       <!-- <typeAlias type="com.cnabs.webapp.domain.UserEntity" alias="alias_user"/>-->
+        <!-- 直接简化扫描doamin-->
+       <!-- <package name="com.cnabs.webapp.domain"/>-->
+    </typeAliases>
+
+    <!--<plugins>
+            <plugin interceptor="com.inxedu.os.common.intercepter.PageInterceptor"></plugin>
+        </plugins>-->
+
+    <!-- Mapper.xml无需挨个引入，改为mybatis-spring mapper-scan扫描类库 -->
+    <mappers>
+        <!--扫描映射配置xml-->
+       <!-- <mapper resource="com/cnabs/webapp/mapper/UserMapper.xml"/>-->
+        <!--扫描映射类-->
+       <!-- <mapper class="com.cnabs.webapp.mapper.UserMapper"/>-->
+        <!--直接扫描包-->
+       <!-- <package name="com.cnabs.webapp.mapper"/>-->
+    </mappers>
+
+    <!--原mybatiss配置数据源 改为由mybatis-spring配置-->
+   <!-- <environments default="mysql">
+        <environment id="mysql">
+            <transactionManager type="JDBC"></transactionManager>
+            <dataSource type="POOLED">
+                <property name="diver" value="com.mysql.jdbc.Driver"/>
+            </dataSource>
+        </environment>
+    </environments>-->
+
+</configuration>

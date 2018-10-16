@@ -2,12 +2,23 @@ package com.heyi.core.netty;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.logging.LogFactory;
+import org.apache.ibatis.logging.log4j.Log4jImpl;
+import org.apache.ibatis.session.AutoMappingBehavior;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.jca.cci.CciOperationNotSupportedException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -18,7 +29,7 @@ import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = {"com.heyi.core.netty"})
-@MapperScan(basePackages = "com.heyi.core.netty.repository")
+@MapperScan(basePackages = {"com.heyi.core.netty.repository","com.heyi.core.netty.mapper"})
 //@PropertySources({@PropertySource(""),@PropertySource("")})
 public class AutoConfig {
 
@@ -66,12 +77,37 @@ public class AutoConfig {
     }
 
     @Bean
-    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource){
+    public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource) throws Exception{
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
+
+        //手动创建mybatis-config
         org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
         configuration.setMapUnderscoreToCamelCase(true);
+        configuration.setCacheEnabled(true);
+        configuration.setLazyLoadingEnabled(true);
+        configuration.setLogPrefix("dao.");
+        //configuration.addMappers("");
         factoryBean.setConfiguration(configuration);
+
+        //加载mybatis配置文件
+       /* Resource mybatisConfig=new DefaultResourceLoader().getResource("classpath:mybatis-config.xml");
+        factoryBean.setConfigLocation(mybatisConfig);*/
+
+
+        //加载要扫描的所有mapper.xml配置文件
+        ResourcePatternResolver resolver=new PathMatchingResourcePatternResolver();
+        Resource[] resources= resolver.getResources("classpath:mapper/*Mapper.xml");
+        factoryBean.setMapperLocations(resources);
+
         return factoryBean;
     }
+
+    //已通过注解创建 Mybatis- MapperScanner加载mapper类
+   /* @Bean
+    public MapperScannerConfigurer mapperScannerConfigurer(){
+        MapperScannerConfigurer mapperScannerConfigurer=new MapperScannerConfigurer();
+        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
+        mapperScannerConfigurer.setBasePackage("com.heyi.core.netty.mapper");
+    }*/
 }
