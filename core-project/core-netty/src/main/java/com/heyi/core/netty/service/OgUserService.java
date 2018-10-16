@@ -5,6 +5,8 @@ import com.heyi.core.netty.repository.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @描述 com.heyi.core.netty.service
  * @创建人 ljliu
@@ -22,5 +24,9 @@ public class OgUserService {
 
     public int addUser(OgUser user){
         return this.userMapper.addUser(user);
+    }
+
+    public List<OgUser> getAll(){
+        return this.userMapper.getAll();
     }
 }

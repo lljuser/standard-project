@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @描述 com.heyi.core.netty.repository
  * @创建人 ljliu
@@ -14,6 +16,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserMapper {
+    @Select("SELECT * FROM sys_oguser")
+    List<OgUser> getAll();
+
+
     @Select("SELECT * FROM sys_oguser WHERE id=#{userId}")
     OgUser getUserByUserId(@Param("userId") String userId);
 

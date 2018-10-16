@@ -18,7 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @描述 com.heyi.core.netty.service
@@ -28,7 +29,7 @@ import java.util.Calendar;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {AutoConfig.class})
-@ActiveProfiles("dev")
+@ActiveProfiles("prod")
 //@Transactional
 public class OgUserServiceTest {
 
@@ -49,26 +50,26 @@ public class OgUserServiceTest {
     }
 
     @Test
-    public void getUser() throws Exception{
-        String id="8a81831766770f8b0166770f8b590000";
+    public void getUser() throws Exception {
+        String id = "8a81831766770f8b0166770f8b590000";
         OgUser user = this.userService.getUser(id);
-        ObjectMapper mapper=new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
-        System.out.println( mapper.writeValueAsString(user));
-        Assert.assertEquals(true,user.getSex());
-        Assert.assertEquals("刘立军",user.getUserName());
-        Assert.assertEquals("llj",user.getWorkNo());
+        System.out.println(mapper.writeValueAsString(user));
+        Assert.assertEquals(true, user.getSex());
+        Assert.assertEquals("刘立军", user.getUserName());
+        Assert.assertEquals("llj", user.getWorkNo());
     }
 
     @Test
-    public void addUser() throws  Exception{
-        OgUser user=new OgUser();
+    public void addUser() throws Exception {
+        OgUser user = new OgUser();
         user.setId(UUIDHexGenerator.generate());
         user.setWorkNo("llj");
         user.setUserName("刘立军");
         user.setEnabled(true);
         user.setSex(true);
-        SimpleDateFormat df =new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         user.setBirthday(df.parse("1984-09-21"));
         //user.setCreateTime(new Date());
         //user.setLastModifyTime(new Date());
@@ -76,9 +77,52 @@ public class OgUserServiceTest {
     }
 
     @Test
-    public void calendarTest(){
+    public void getAll() throws Exception{
+        List<OgUser> list = this.userService.getAll();
+        list.forEach((item) -> {
+            System.out.println(item.getUserName() + ":" + item.getWorkNo());
+        });
 
-        Calendar calendar=Calendar.getInstance();
+
+        list.stream().limit(5).forEach((item) -> System.out.println("->" + item.getUserName()));
+        System.out.println(list.stream().count() + ":" + list.size());
+
+        System.out.println(list.stream().mapToInt(OgUser::getSortIndex).sum());
+
+        list.stream().map(this::getContact).forEach((item) -> System.out.println(item));
+
+        list = list.stream().sorted(new Comparator<OgUser>() {
+            @Override
+            public int compare(OgUser o1, OgUser o2) {
+                return o2.getSortIndex() - o1.getSortIndex();
+            }
+        }).collect(Collectors.toList());
+
+        Map<String, String> mapList = list.stream().collect(Collectors.toMap(OgUser::getId, OgUser::getWorkNo));
+        mapList.entrySet().forEach((item) -> System.out.println(item.getKey() + ":" + item.getValue()));
+        list.forEach((item) -> {
+            System.out.println(item.getUserName() + ":" + item.getWorkNo() + ":" + item.getSortIndex());
+        });
+
+        System.out.println("----------------------");
+        OgUser user= list.stream().filter(o -> o.getWorkNo().equals("admin")).findFirst().get();
+        System.out.println("---"+user.getWorkNo()+"--"+user.getUserName());
+
+        List<Integer> list1=new ArrayList<>();
+        list1.add(10);
+        list1.add(20);
+        list1.stream().mapToInt(Integer::intValue).sum();
+    }
+
+    public String getContact(OgUser user) {
+        return user.getWorkNo() + "---" + user.getUserName();
+    }
+
+
+    @Test
+    public void calendarTest() {
+
+        Calendar calendar = Calendar.getInstance();
         //calendar.setTime(new Date());
         System.out.println(calendar.getTime());
 
@@ -88,8 +132,8 @@ public class OgUserServiceTest {
         System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
         System.out.println(calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH));
 
-        calendar.add(Calendar.YEAR,1);
-        calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.YEAR, 1);
+        calendar.add(Calendar.MONTH, 1);
         System.out.println(calendar.getTime());
 
 
