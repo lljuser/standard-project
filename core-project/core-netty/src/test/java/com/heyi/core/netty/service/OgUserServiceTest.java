@@ -108,6 +108,10 @@ public class OgUserServiceTest {
         OgUser user= list.stream().filter(o -> o.getWorkNo().equals("admin")).findFirst().get();
         System.out.println("---"+user.getWorkNo()+"--"+user.getUserName());
 
+
+        Map<String,List<OgUser>> group1 =  list.stream().collect(Collectors.groupingBy(OgUser::getWorkNo));
+        group1.entrySet().forEach(o-> System.out.println(o.getKey()+"==="+o.getValue().size()));
+
         List<Integer> list1=new ArrayList<>();
         list1.add(10);
         list1.add(20);
