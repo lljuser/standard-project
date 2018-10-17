@@ -7,7 +7,7 @@
         </constructor>-->
         <id property="id" column="Id"/>
         <result property="userName" column="UserName"/>
-        <result property="workNo" column="Domain"/>
+        <result property="workNo" column="WorkNo"/>
         <result property="sortIndex" column="SortIndex"/>
         <result property="birthday" column="Birthday"/>
         <result property="createTime" column="CreateTime"/>
@@ -40,4 +40,11 @@
             #{avator},#{sortIndex},#{createTime},#{createUserName},#{createWorkNo},
             now(),#{lastModifyUserName},#{lastModifyWorkNo})
     </insert>
+    <update id="updateUser">
+        UPDATE sys_oguser SET WorkNo=#{workNo},UserName=#{userName},Password=#{password},
+            TelPhone=#{telPhone},Email=#{email},OfficePhone=#{officePhone},Domain=#{domain},
+            Sex=#{sex},IsEnabled=#{isEnabled},Birthday=#{birthday},ShortMobile=#{shortMobile},
+            PropertyId=#{propertyId},PropertyName=#{propertyName},PropertyNo=#{propertyNo},Duty=#{duty},
+            Avator=#{avator},SortIndex=#{sortIndex},LastModifyTime=now(),nick_name=#{nickName} WHERE id=#{id}
+    </update>
 </mapper>

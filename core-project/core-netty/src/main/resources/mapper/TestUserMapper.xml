@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heyi.core.netty.mapper.TestUserMapper">
+    <insert id="saveUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_user(name,age,birthday,address,createtime)
+        VALUES(#{name},#{age},#{birthday},#{address},now())
+        <selectKey keyColumn="id" resultType="int" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+</mapper>

@@ -21,4 +21,6 @@ public interface OgUserMapper {
     List<OgProperty> getPropertiesByUserId(String userId);
 
     Integer saveUser(OgUser user);
+
+    Integer updateUser(OgUser user);
 }

@@ -5,7 +5,9 @@ import com.heyi.core.netty.AutoConfig;
 import com.heyi.core.netty.common.UUIDHexGenerator;
 import com.heyi.core.netty.domain.OgProperty;
 import com.heyi.core.netty.domain.OgUser;
+import com.heyi.core.netty.domain.TestUser;
 import com.heyi.core.netty.mapper.OgUserMapper;
+import com.heyi.core.netty.mapper.TestUserMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
@@ -127,7 +129,7 @@ public class MyBatisConfigTest {
     public void saveUser(){
         SqlSession sqlSession=sqlSessionFactory.openSession();
         try{
-           OgUserMapper userMapper = sqlSession.getMapper(OgUserMapper.class);
+            OgUserMapper userMapper = sqlSession.getMapper(OgUserMapper.class);
 
             OgUser user = new OgUser();
             user.setId(UUIDHexGenerator.generate());
@@ -155,5 +157,50 @@ public class MyBatisConfigTest {
         }
 
 
+    }
+
+    @Test
+    public void saveTestUser() throws  Exception{
+        SqlSession sqlSession=sqlSessionFactory.openSession();
+        try {
+            TestUserMapper mapper=sqlSession.getMapper(TestUserMapper.class);
+            TestUser user=new TestUser();
+            user.setName("rick");
+            user.setAddress("shanghai");
+            user.setAge(28);
+
+            SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+            Date mydate = dateFormat.parse("1989-10-1");
+            user.setBirthday(mydate);
+
+            Integer result = mapper.saveUser(user);
+            System.out.println(user.getId()+"------------------------>:"+result);
+
+        }finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    public void updateUser() throws  Exception{
+        SqlSession sqlSession=sqlSessionFactory.openSession();
+        try {
+            OgUserMapper mapper=sqlSession.getMapper(OgUserMapper.class);
+
+            OgUser user = mapper.getUserByUserId("00000000-0000-0000-0000-000000000001");
+
+            user.setUserName("超级管理员");
+            user.setSortIndex(5);
+            user.setDuty("IT");
+            user.setNickName("Rick");
+
+            mapper.updateUser(user);
+
+            OgUser user1 =  mapper.getUserByUserId("00000000-0000-0000-0000-000000000001");
+            Assert.assertEquals(user1.getNickName(),user.getNickName());
+
+        }finally {
+            sqlSession.close();
+        }
     }
 }
