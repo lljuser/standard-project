@@ -2,10 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.heyi.core.netty.mapper.OgUserMapper">
-    <select id="getUserByUserId" parameterType="String" resultType="com.heyi.core.netty.domain.OgUser">
+    <resultMap id="userMapping" type="com.heyi.core.netty.domain.OgUser" autoMapping="true">
+        <!--<constructor>
+        </constructor>-->
+        <id property="id" column="Id"/>
+        <result property="userName" column="UserName"/>
+        <result property="workNo" column="Domain"/>
+        <result property="sortIndex" column="SortIndex"/>
+        <result property="birthday" column="Birthday"/>
+        <result property="createTime" column="CreateTime"/>
+       <!-- <association property=""></association>
+        <collection property=""></collection>
+        <discriminator javaType="">
+            <case value=""></case>
+        </discriminator>-->
+    </resultMap>
+    <select id="getUserByUserId" resultMap="userMapping">
         SELECT * FROM sys_oguser WHERE id=#{userId} limit 1
     </select>
     <select id="getAll" resultType="com.heyi.core.netty.domain.OgUser">
         SELECT * FROM sys_oguser
     </select>
+    <select id="getPropertiesByUserId" resultType="com.heyi.core.netty.domain.OgProperty">
+        SELECT a.Id,a.ParentId,a.Name,a.PropertyNo,a.PropertyType,a.IsEnabled,
+        a.CreateTime,c.UserName as 'user.userName',c.WorkNo as 'user.workNo',c.Id as 'userId' FROM sys_ogproperty a
+        LEFT JOIN sys_oguserproperty o on a.Id = o.PropertyId
+        LEFT JOIN sys_oguser  c on o.UserId=c.Id WHERE c.Id = #{userId}
+    </select>
+    <insert id="saveUser">
+        INSERT INTO sys_oguser(Id,WorkNo,UserName,Password,TelPhone,
+            Email,OfficePhone,Domain,Sex,IsEnabled,Birthday,ShortMobile,PropertyId,
+            PropertyName,PropertyNo,Duty,Avator,SortIndex,CreateTime,CreateUserName,
+            CreateWorkNo,LastModifyTime,LastModifyUserName,LastModifyWorkNo)
+            VALUES(#{id},#{workNo},#{userName},#{password},#{telPhone},
+            #{email},#{officePhone},#{domain},#{sex},#{isEnabled},#{birthday},
+            #{shortMobile},#{propertyId},#{propertyName},#{propertyNo},#{duty},
+            #{avator},#{sortIndex},#{createTime},#{createUserName},#{createWorkNo},
+            now(),#{lastModifyUserName},#{lastModifyWorkNo})
+    </insert>
 </mapper>

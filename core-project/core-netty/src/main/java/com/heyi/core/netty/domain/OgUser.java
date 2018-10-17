@@ -31,6 +31,15 @@ public class OgUser {
     private Date createTime;
     private String createUserName;
     private String createWorkNo;
+    private String nickName;
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public String getId() {
         return id;
@@ -228,4 +237,13 @@ public class OgUser {
     private String lastModifyUserName;
     private String LastModifyWorkNo;
 
+    private Date timeStamp;
+
+    public Date getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(Date timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 }

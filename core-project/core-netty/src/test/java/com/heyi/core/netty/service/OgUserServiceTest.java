@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {AutoConfig.class})
-@ActiveProfiles("prod")
+@ActiveProfiles("dev")
 //@Transactional
 public class OgUserServiceTest {
 
@@ -51,12 +52,12 @@ public class OgUserServiceTest {
 
     @Test
     public void getUser() throws Exception {
-        String id = "8a81831766770f8b0166770f8b590000";
+        String id = "00000000-0000-0000-0000-000000000001";
         OgUser user = this.userService.getUser(id);
         ObjectMapper mapper = new ObjectMapper();
 
         System.out.println(mapper.writeValueAsString(user));
-        Assert.assertEquals(true, user.getSex());
+        //Assert.assertEquals(true, user.getSex());
         Assert.assertEquals("刘立军", user.getUserName());
         Assert.assertEquals("llj", user.getWorkNo());
     }
@@ -69,6 +70,7 @@ public class OgUserServiceTest {
         user.setUserName("刘立军");
         user.setEnabled(true);
         user.setSex(true);
+        user.setSortIndex(100);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         user.setBirthday(df.parse("1984-09-21"));
         //user.setCreateTime(new Date());
@@ -98,6 +100,10 @@ public class OgUserServiceTest {
             }
         }).collect(Collectors.toList());
 
+        System.out.println("---------skip-------------");
+        list.stream().skip(1).limit(5).forEach(o->System.out.println(o.getSortIndex()));
+        System.out.println("---------skip-------------");
+
         Map<String, String> mapList = list.stream().collect(Collectors.toMap(OgUser::getId, OgUser::getWorkNo));
         mapList.entrySet().forEach((item) -> System.out.println(item.getKey() + ":" + item.getValue()));
         list.forEach((item) -> {
@@ -116,6 +122,11 @@ public class OgUserServiceTest {
         list1.add(10);
         list1.add(20);
         list1.stream().mapToInt(Integer::intValue).sum();
+
+
+
+        list.parallelStream().filter(o->o.getSortIndex()>2 || o.getWorkNo().equals("llj"))
+                .forEach(o->System.out.println(o.getSortIndex()+":"+o.getWorkNo()));
     }
 
     public String getContact(OgUser user) {
@@ -123,36 +134,8 @@ public class OgUserServiceTest {
     }
 
 
-    @Test
-    public void calendarTest() {
-
-        Calendar calendar = Calendar.getInstance();
-        //calendar.setTime(new Date());
-        System.out.println(calendar.getTime());
-
-        System.out.println(calendar.get(Calendar.YEAR));
-        System.out.println(calendar.get(Calendar.DAY_OF_MONTH));
-        System.out.println(calendar.get(Calendar.DATE));
-        System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
-        System.out.println(calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH));
-
-        calendar.add(Calendar.YEAR, 1);
-        calendar.add(Calendar.MONTH, 1);
-        System.out.println(calendar.getTime());
 
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateString = "2016-01-01 11:11:11";
-        calendar = Calendar.getInstance();
-        long nowDate = calendar.getTime().getTime(); //Date.getTime() 获得毫秒型日期
-        try {
-            long specialDate = sdf.parse(dateString).getTime();
-            long betweenDate = (specialDate - nowDate) / (1000 * 60 * 60 * 24); //计算间隔多少天，则除以毫秒到天的转换公式
-            System.out.print(betweenDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
 
-    }
 }

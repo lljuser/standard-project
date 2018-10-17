@@ -1,7 +1,7 @@
 package com.heyi.core.netty.mapper;
 
+import com.heyi.core.netty.domain.OgProperty;
 import com.heyi.core.netty.domain.OgUser;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,7 +14,11 @@ import java.util.List;
  */
 @Repository
 public interface OgUserMapper {
-    OgUser getUserByUserId(@Param("userId") String userId);
+    OgUser getUserByUserId(String userId);
 
     List<OgUser> getAll();
+
+    List<OgProperty> getPropertiesByUserId(String userId);
+
+    Integer saveUser(OgUser user);
 }
