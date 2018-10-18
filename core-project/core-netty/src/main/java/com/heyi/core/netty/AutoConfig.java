@@ -7,6 +7,7 @@ import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.logging.log4j.Log4jImpl;
 import org.apache.ibatis.session.AutoMappingBehavior;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -84,12 +85,19 @@ public class AutoConfig {
 
         //手动创建mybatis-config
         org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
+
         configuration.setMapUnderscoreToCamelCase(true);
         configuration.setCacheEnabled(true);
         configuration.setLazyLoadingEnabled(true);
         configuration.setLogPrefix("dao.");
         //configuration.addMappers("");
         factoryBean.setConfiguration(configuration);
+
+        /**使用默认的mybatics JdbcTransaction
+         *使用spring事务 注释这段，会使用spring-mybatis的springmanagertransactionfactory
+         **/
+/*        TransactionFactory transactionFactory=new JdbcTransactionFactory();
+        factoryBean.setTransactionFactory(transactionFactory);*/
 
         //加载mybatis配置文件
        /* Resource mybatisConfig=new DefaultResourceLoader().getResource("classpath:mybatis-config.xml");

@@ -69,6 +69,7 @@ public class MyBatisConfigTest {
 
     @Test
     public void getAll(){
+
         SqlSession sqlSession=sqlSessionFactory.openSession();
         try {
             List<OgUser> list =
@@ -129,9 +130,10 @@ public class MyBatisConfigTest {
     }
 
     @Test
-    @Repeat(10)
+    //@Repeat(10)
     public void saveUser(){
-        SqlSession sqlSession=sqlSessionFactory.openSession();
+        SqlSession sqlSession=sqlSessionFactory.openSession(false);
+
         try{
             OgUserMapper userMapper = sqlSession.getMapper(OgUserMapper.class);
 
@@ -157,6 +159,10 @@ public class MyBatisConfigTest {
         }catch (Exception ex){
             System.out.println(ex.getMessage());
         }finally {
+            //这个事务要使用mybatis的jdbc事务才生效
+            //如使用了spring事务框架时，这句不会生效
+            //可在sqlsessionfactorybean创建时设置事务
+            //sqlSession.rollback();
             sqlSession.close();
         }
 
@@ -211,6 +217,7 @@ public class MyBatisConfigTest {
     @Test
     @Ignore
     public void removeUser(){
+        saveUser();
         SqlSession sqlSession=sqlSessionFactory.openSession();
         try{
             OgUserMapper mapper=sqlSession.getMapper(OgUserMapper.class);
@@ -229,7 +236,8 @@ public class MyBatisConfigTest {
 
     @Test
     //@Transactional
-    public void removeUserByWorkNoAndUserName(){
+    public void removeUserByWorkNoAndUserName() throws  Exception{
+        saveUser();
         SqlSession sqlSession=sqlSessionFactory.openSession(true);
         try{
             OgUserMapper mapper=sqlSession.getMapper(OgUserMapper.class);
@@ -239,12 +247,11 @@ public class MyBatisConfigTest {
             System.out.println(ogUser.getId());
             System.out.println("--------remove---------");
             //mapper.removeUser(ogUser.getId());
-            Integer result = mapper.removeUserByWorkNoAndUserName(ogUser);
+            Integer result = mapper.removeUserByWorkNoAndUserName(ogUser.getUserName(),ogUser.getWorkNo());
+            //Integer result = mapper.removeUserByWorkNoAndUserName(ogUser);
             System.out.println("删除数："+result.intValue());
-            sqlSession.commit();
 
         }finally {
-            sqlSession.rollback();
             sqlSession.close();
         }
     }

@@ -31,7 +31,7 @@ public interface OgUserMapper {
 
     Integer removeUser(OgUser user);
 
-    Integer removeUserByWorkNoAndUserName(@Param("userName") String userId,@Param("userName")String workNo);
+    Integer removeUserByWorkNoAndUserName(@Param("userName") String userId,@Param("workNo")String workNo);
 
     Integer removeUserByWorkNoAndUserName(OgUser user);
 }
