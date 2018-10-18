@@ -15,15 +15,18 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -126,6 +129,7 @@ public class MyBatisConfigTest {
     }
 
     @Test
+    @Repeat(10)
     public void saveUser(){
         SqlSession sqlSession=sqlSessionFactory.openSession();
         try{
@@ -200,6 +204,47 @@ public class MyBatisConfigTest {
             Assert.assertEquals(user1.getNickName(),user.getNickName());
 
         }finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    @Ignore
+    public void removeUser(){
+        SqlSession sqlSession=sqlSessionFactory.openSession();
+        try{
+            OgUserMapper mapper=sqlSession.getMapper(OgUserMapper.class);
+
+            OgUser ogUser=mapper.getLastUser();
+            System.out.println("--------will remove---------");
+            System.out.println(ogUser.getId());
+            System.out.println("--------remove---------");
+            //mapper.removeUser(ogUser.getId());
+            mapper.removeUser(ogUser);
+
+        }finally {
+            sqlSession.close();
+        }
+    }
+
+    @Test
+    //@Transactional
+    public void removeUserByWorkNoAndUserName(){
+        SqlSession sqlSession=sqlSessionFactory.openSession(true);
+        try{
+            OgUserMapper mapper=sqlSession.getMapper(OgUserMapper.class);
+
+            OgUser ogUser=mapper.getLastUser();
+            System.out.println("--------will remove---------");
+            System.out.println(ogUser.getId());
+            System.out.println("--------remove---------");
+            //mapper.removeUser(ogUser.getId());
+            Integer result = mapper.removeUserByWorkNoAndUserName(ogUser);
+            System.out.println("删除数："+result.intValue());
+            sqlSession.commit();
+
+        }finally {
+            sqlSession.rollback();
             sqlSession.close();
         }
     }

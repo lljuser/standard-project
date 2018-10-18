@@ -20,6 +20,9 @@
     <select id="getUserByUserId" resultMap="userMapping">
         SELECT * FROM sys_oguser WHERE id=#{userId} limit 1
     </select>
+    <select id="getLastUser" resultType="com.heyi.core.netty.domain.OgUser">
+         SELECT * FROM sys_oguser ORDER BY CreateTime DESC LIMIT 1
+    </select>
     <select id="getAll" resultType="com.heyi.core.netty.domain.OgUser">
         SELECT * FROM sys_oguser
     </select>
@@ -47,4 +50,10 @@
             PropertyId=#{propertyId},PropertyName=#{propertyName},PropertyNo=#{propertyNo},Duty=#{duty},
             Avator=#{avator},SortIndex=#{sortIndex},LastModifyTime=now(),nick_name=#{nickName} WHERE id=#{id}
     </update>
+    <delete id="removeUser">
+        DELETE FROM sys_oguser WHERE id=#{id}
+    </delete>
+    <delete id="removeUserByWorkNoAndUserName">
+        DELETE FROM sys_oguser WHERE WorkNo=#{workNo} and UserName=#{userName}
+    </delete>
 </mapper>
