@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @描述 com.heyi.core.netty.mapper
@@ -31,7 +32,17 @@ public interface OgUserMapper {
 
     Integer removeUser(OgUser user);
 
-    Integer removeUserByWorkNoAndUserName(@Param("userName") String userId,@Param("workNo")String workNo);
+    Integer removeUserByWorkNoAndUserName(@Param("userName") String userName,@Param("workNo")String workNo);
 
     Integer removeUserByWorkNoAndUserName(OgUser user);
+
+    OgUser getUserByWorkNoAndUserName(@Param("workNo")String workNo,@Param("userName") String userName);
+
+    List<OgUser> getUserByIds(List<String> ids);
+
+    List<OgUser> getUserByUsers(@Param("userList") List<OgUser> list,@Param("workNo") String workNo);
+
+    Integer batchSave(List<OgUser> list);
+
+    Integer updateByMap(Map<String,Object> map);
 }

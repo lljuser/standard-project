@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.heyi.core.netty.AutoConfig;
 import com.heyi.core.netty.common.UUIDHexGenerator;
 import com.heyi.core.netty.domain.OgUser;
+import com.heyi.core.netty.domain.TestUser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -50,24 +48,26 @@ public class OgUserServiceTest {
         logger.info("-------------one method test finish-----------------");
     }
 
+
+
     @Test
     public void getUser() throws Exception {
-        String id = "00000000-0000-0000-0000-000000000001";
-        OgUser user = this.userService.getUser(id);
+        //String id = "00000000-0000-0000-0000-000000000001";
+        OgUser user = this.userService.getLastUser();
         ObjectMapper mapper = new ObjectMapper();
 
         System.out.println(mapper.writeValueAsString(user));
         //Assert.assertEquals(true, user.getSex());
-        Assert.assertEquals("刘立军", user.getUserName());
-        Assert.assertEquals("llj", user.getWorkNo());
+        //Assert.assertEquals("刘立军", user.getUserName());
+        //Assert.assertEquals("llj", user.getWorkNo());
     }
 
     @Test
     public void addUser() throws Exception {
         OgUser user = new OgUser();
         user.setId(UUIDHexGenerator.generate());
-        user.setWorkNo("llj");
-        user.setUserName("刘立军");
+        user.setWorkNo("llj"+new Date().getTime());
+        user.setUserName("刘立军-"+new Date().getTime());
         user.setEnabled(true);
         user.setSex(true);
         user.setSortIndex(100);
@@ -75,18 +75,25 @@ public class OgUserServiceTest {
         user.setBirthday(df.parse("1984-09-21"));
         //user.setCreateTime(new Date());
         //user.setLastModifyTime(new Date());
-        this.userService.addUser(user);
+        Integer result = this.userService.addUser(user);
+
+        System.out.println("-------------print id---------");
+        System.out.println("id:"+user.getId()+"--------------result:"+result);
     }
 
     @Test
     public void getAll() throws Exception{
         List<OgUser> list = this.userService.getAll();
+        ObjectMapper objectMapper=new ObjectMapper();
         list.forEach((item) -> {
-            System.out.println(item.getUserName() + ":" + item.getWorkNo());
+            try {
+                System.out.println(objectMapper.writeValueAsString(item));
+            }catch (Exception ex){}
+
         });
 
 
-        list.stream().limit(5).forEach((item) -> System.out.println("->" + item.getUserName()));
+        /*list.stream().limit(5).forEach((item) -> System.out.println("->" + item.getUserName()));
         System.out.println(list.stream().count() + ":" + list.size());
 
         System.out.println(list.stream().mapToInt(OgUser::getSortIndex).sum());
@@ -126,16 +133,52 @@ public class OgUserServiceTest {
 
 
         list.parallelStream().filter(o->o.getSortIndex()>2 || o.getWorkNo().equals("llj"))
-                .forEach(o->System.out.println(o.getSortIndex()+":"+o.getWorkNo()));
+                .forEach(o->System.out.println(o.getSortIndex()+":"+o.getWorkNo()));*/
     }
 
     public String getContact(OgUser user) {
         return user.getWorkNo() + "---" + user.getUserName();
     }
 
+    @Test
+    public void addTestUser() throws Exception{
+        TestUser user=new TestUser();
+        user.setName("test-admin");
+        SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        user.setBirthday(dateFormat.parse("1984-09-21"));
+        user.setAge(34);
+        user.setAddress("henan");
 
+        Integer result = this.userService.addTestUser(user);
+        System.out.println("id:"+user.getId()+"--------------result:"+result);
+    }
 
+    @Test
+    public void removeUser() throws Exception{
+        this.addUser();
 
+        OgUser user= this.userService.getLastUser();
+        Integer result = this.userService.removeUser(user.getId());
+        System.out.println(user.getId());
+        System.out.println("--------------");
+        System.out.println(result);
+    }
 
+    @Test
+    public void updateUser(){
+        OgUser user= this.userService.getLastUser();
+        user.setNickName("app-"+new Date().getTime());
+        user.setUserName("new name");
+        this.userService.updateUser(user);
+    }
+
+    @Test
+    public void testSelectProvider() throws Exception{
+        String workNo="admin";
+        String userName="管理员";
+        OgUser user = this.userService.getUserByUserNameAndWorkNo(workNo,userName);
+        ObjectMapper mapper=new ObjectMapper();
+        System.out.println(mapper.writeValueAsString(user));
+    }
 
 }

@@ -11,17 +11,17 @@
         <result property="sortIndex" column="SortIndex"/>
         <result property="birthday" column="Birthday"/>
         <result property="createTime" column="CreateTime"/>
-       <!-- <association property=""></association>
-        <collection property=""></collection>
-        <discriminator javaType="">
-            <case value=""></case>
-        </discriminator>-->
+        <!-- <association property=""></association>
+         <collection property=""></collection>
+         <discriminator javaType="">
+             <case value=""></case>
+         </discriminator>-->
     </resultMap>
     <select id="getUserByUserId" resultMap="userMapping">
         SELECT * FROM sys_oguser WHERE id=#{userId} limit 1
     </select>
     <select id="getLastUser" resultType="com.heyi.core.netty.domain.OgUser">
-         SELECT * FROM sys_oguser ORDER BY CreateTime DESC LIMIT 1
+         SELECT * FROM sys_oguser ORDER BY CreateTime DESC limit 1
     </select>
     <select id="getAll" resultType="com.heyi.core.netty.domain.OgUser">
         SELECT * FROM sys_oguser
@@ -43,6 +43,7 @@
             #{avator},#{sortIndex},#{createTime},#{createUserName},#{createWorkNo},
             now(),#{lastModifyUserName},#{lastModifyWorkNo})
     </insert>
+
     <update id="updateUser">
         UPDATE sys_oguser SET WorkNo=#{workNo},UserName=#{userName},Password=#{password},
             TelPhone=#{telPhone},Email=#{email},OfficePhone=#{officePhone},Domain=#{domain},
@@ -50,10 +51,91 @@
             PropertyId=#{propertyId},PropertyName=#{propertyName},PropertyNo=#{propertyNo},Duty=#{duty},
             Avator=#{avator},SortIndex=#{sortIndex},LastModifyTime=now(),nick_name=#{nickName} WHERE id=#{id}
     </update>
+
     <delete id="removeUser">
         DELETE FROM sys_oguser WHERE id=#{id}
     </delete>
+
+    <!---CONCAT-MYSQL can you <bind> replace-/*and UserName LIKE CONCAT('%',#{userName},'%')*/-->
     <delete id="removeUserByWorkNoAndUserName">
-        DELETE FROM sys_oguser WHERE WorkNo=#{workNo} and UserName=#{userName}
+        DELETE FROM sys_oguser WHERE WorkNo=#{workNo}
+
+        <bind name="userNameLike" value="'%'+ userName + '%'"/>
+        and UserName like #{userNameLike}
     </delete>
+
+    <select id="getUserByWorkNoAndUserName" resultType="com.heyi.core.netty.domain.OgUser">
+        SELECT * FROM sys_oguser
+        <where>
+            <if test="workNo!=null and workNo!=''">
+                and WorkNo=#{workNo}
+            </if>
+            <if test="userName!=null and userName!=''">
+                and UserName=#{userName}
+            </if>
+            <!-- <choose>
+                 <when test="workNo!=null and workNo!=''">
+                     and WorkNo=#{workNo}
+                 </when>
+                 <when test="userName!=null and userName!=''">
+                     and userName=#{userName}
+                 </when>
+                 <otherwise>
+                     and 1=2
+                 </otherwise>
+             </choose>-->
+        </where>
+        limit 1
+    </select>
+
+    <select id="getUserByIds" resultType="com.heyi.core.netty.domain.OgUser">
+        SELECT * FROM sys_oguser WHERE Id IN
+        <foreach collection="list" open="(" close=")" separator="," item="id" index="i">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="getUserByUsers" resultType="com.heyi.core.netty.domain.OgUser">
+        SELECT * FROM sys_oguser WHERE Id IN
+        <foreach collection="userList" open="(" close=")" separator="," item="user" index="i">
+            #{user.id}
+        </foreach>
+        OR WorkNo=#{workNo}
+    </select>
+
+    <insert id="batchSave"  >
+         INSERT INTO sys_oguser(Id,WorkNo,UserName,Password,TelPhone,
+            Email,OfficePhone,Domain,Sex,IsEnabled,Birthday,ShortMobile,PropertyId,
+            PropertyName,PropertyNo,Duty,Avator,SortIndex,CreateTime,CreateUserName,
+            CreateWorkNo,LastModifyTime,LastModifyUserName,LastModifyWorkNo)
+            VALUES
+            <foreach collection="list" item="user" separator=",">
+                (
+                #{user.id},#{user.workNo},#{user.userName},#{user.password},#{user.telPhone},
+                #{user.email},#{user.officePhone},#{user.domain},#{user.sex},#{user.isEnabled},#{user.birthday},
+                #{user.shortMobile},#{user.propertyId},#{user.propertyName},#{user.propertyNo},#{user.duty},
+                #{user.avator},#{user.sortIndex},#{user.createTime},#{user.createUserName},#{user.createWorkNo},
+                now(),#{user.lastModifyUserName},#{user.lastModifyWorkNo}
+                )
+            </foreach>
+    </insert>
+
+    <update id="updateByMap">
+        UPDATE sys_oguser SET
+        <foreach collection="_parameter" item="val" index="key" separator=",">
+            ${key}=#{val}
+        </foreach>
+        WHERE Id=#{id}
+    </update>
+
+    <update id="test">
+        <if test="list!=null and list.size()>0 ">
+
+        </if>
+        <if test="@com.heyi.core.netty.common.StringHelper@isEmpty(userName)">
+
+        </if>
+        <!--use <bind> print log-->
+        <bind name="pringLog" value="@com.heyi.core.netty.common.StringHelper@pringLog(_parameter)"/>
+    </update>
 </mapper>
