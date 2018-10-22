@@ -1,6 +1,13 @@
 package com.heyi.core.netty.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @描述 com.heyi.core.netty.domain
@@ -8,8 +15,8 @@ import java.util.Date;
  * @创建时间 2018/10/15
  * @修改人和其它信息
  */
-
-public class OgUser {
+//@JsonFilter("myFilter")  //这种方法忽略很坑 objectMapper的时候一定要设置这个filter
+public class OgUser extends OperationLog {
     private String id;
     private String workNo;
     private String userName;
@@ -28,9 +35,7 @@ public class OgUser {
     private String duty;
     private String avator;
     private Integer sortIndex;
-    private Date createTime;
-    private String createUserName;
-    private String createWorkNo;
+
     private String nickName;
 
     public String getNickName() {
@@ -185,58 +190,6 @@ public class OgUser {
         this.sortIndex = sortIndex;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    public String getCreateWorkNo() {
-        return createWorkNo;
-    }
-
-    public void setCreateWorkNo(String createWorkNo) {
-        this.createWorkNo = createWorkNo;
-    }
-
-    public Date getLastModifyTime() {
-        return lastModifyTime;
-    }
-
-    public void setLastModifyTime(Date lastModifyTime) {
-        this.lastModifyTime = lastModifyTime;
-    }
-
-    public String getLastModifyUserName() {
-        return lastModifyUserName;
-    }
-
-    public void setLastModifyUserName(String lastModifyUserName) {
-        this.lastModifyUserName = lastModifyUserName;
-    }
-
-    public String getLastModifyWorkNo() {
-        return LastModifyWorkNo;
-    }
-
-    public void setLastModifyWorkNo(String lastModifyWorkNo) {
-        LastModifyWorkNo = lastModifyWorkNo;
-    }
-
-    private Date lastModifyTime;
-    private String lastModifyUserName;
-    private String LastModifyWorkNo;
-
     private Date timeStamp;
 
     public Date getTimeStamp() {
@@ -245,5 +198,27 @@ public class OgUser {
 
     public void setTimeStamp(Date timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public List<OgProperty> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(List<OgProperty> properties) {
+        this.properties = properties;
+    }
+
+    @JsonIgnore
+    private List<OgProperty> properties;
+
+
+    private OperationLog operationLog;
+
+    public OperationLog getOperationLog() {
+        return operationLog;
+    }
+
+    public void setOperationLog(OperationLog operationLog) {
+        this.operationLog = operationLog;
     }
 }

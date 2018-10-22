@@ -86,11 +86,15 @@ public class MyBatisConfigTest {
     public void getUser(){
         SqlSession sqlSession=sqlSessionFactory.openSession();
         try {
-            OgUser user =
+            OgUserMapper ogUserMapper = sqlSession.getMapper(OgUserMapper.class);
+            /*OgUser user =
                     sqlSession.selectOne("com.heyi.core.netty.mapper.OgUserMapper.getUserByUserId",
-                            "8a8183176681068301668106849a0000");
+                            "8a8183176681068301668106849a0000");*/
+            System.out.println("1----------------------------------");
+            OgUser user = ogUserMapper.getUserByUserId("00000000-0000-0000-0000-000000000002");
 
-            ObjectMapper mapper=new ObjectMapper();
+
+          /*  ObjectMapper mapper=new ObjectMapper();
             logger.info(mapper.writeValueAsString(user));
             SimpleDateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -98,12 +102,29 @@ public class MyBatisConfigTest {
             logger.info( dateFormat.format(user.getTimeStamp()));
             logger.info(user.getTimeStamp());
             logger.info(user.getCreateTime());
-            logger.info(dateFormat.format(user.getLastModifyTime()));
+            logger.info(dateFormat.format(user.getLastModifyTime()));*/
+
+            System.out.println("2----------------------------------");
+            OgUser user1 = ogUserMapper.getUserByUserId("00000000-0000-0000-0000-000000000002");
+            System.out.println("3----------------------------------");
+            OgUser user2 = ogUserMapper.getUserByUserId("00000000-0000-0000-0000-000000000002");
+
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
+           throw ex;
         }finally {
             sqlSession.close();
         }
+
+       /* try {
+            OgUserMapper ogUserMapper = sqlSession.getMapper(OgUserMapper.class);
+            System.out.println("4----------------------------------");
+            OgUser user = ogUserMapper.getUserByUserId("00000000-0000-0000-0000-000000000002");
+
+        }catch (Exception ex){
+            throw ex;
+        }finally {
+            sqlSession.close();
+        }*/
     }
 
     @Test
@@ -116,7 +137,7 @@ public class MyBatisConfigTest {
 
             ObjectMapper mapper=new ObjectMapper();
             System.out.println(mapper.writeValueAsString(propertyList));
-            propertyList.forEach(o->System.out.println(o.getUser().getWorkNo()));
+            //propertyList.forEach(o->System.out.println(o.getUser().getWorkNo()));
 
             logger.info(mapper.writeValueAsString(propertyList));
             Assert.assertEquals(3,propertyList.size());

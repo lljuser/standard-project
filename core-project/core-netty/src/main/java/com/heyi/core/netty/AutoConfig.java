@@ -6,6 +6,8 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.logging.log4j.Log4jImpl;
 import org.apache.ibatis.session.AutoMappingBehavior;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -87,6 +89,9 @@ public class AutoConfig {
         org.apache.ibatis.session.Configuration configuration=new org.apache.ibatis.session.Configuration();
 
         configuration.setMapUnderscoreToCamelCase(true);
+        //全局延迟加载开关 false启动延迟加载 true默认直接加载
+        configuration.setAggressiveLazyLoading(false);
+        //全局二级缓存开关
         configuration.setCacheEnabled(true);
         configuration.setLazyLoadingEnabled(true);
         configuration.setLogPrefix("dao.");
@@ -111,6 +116,7 @@ public class AutoConfig {
 
         return factoryBean;
     }
+
 
     //已通过注解创建 Mybatis- MapperScanner加载mapper类
    /* @Bean

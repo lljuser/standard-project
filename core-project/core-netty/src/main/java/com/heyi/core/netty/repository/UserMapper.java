@@ -15,6 +15,7 @@ import java.util.List;
  * @修改人和其它信息
  */
 @Repository
+//@CacheNamespace
 public interface UserMapper {
     @Select("SELECT * FROM sys_oguser")
     @Results(id="simpleOgUserMapping",value = {

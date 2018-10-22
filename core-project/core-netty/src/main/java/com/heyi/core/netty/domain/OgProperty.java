@@ -1,6 +1,11 @@
 package com.heyi.core.netty.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.Date;
+import java.util.List;
 
 /**
  * @描述 com.heyi.core.netty.domain
@@ -8,7 +13,7 @@ import java.util.Date;
  * @创建时间 2018/10/17
  * @修改人和其它信息
  */
-public class OgProperty {
+public class OgProperty extends OperationLog {
     private String id;
     private String parentId;
     private String name;
@@ -17,12 +22,8 @@ public class OgProperty {
     private String roleId;
     private String sortIndex;
     private String description;
-    private Boolean isEnabled; private Date createTime;
-    private String createUserName;
-    private String createWorkNo;
-    private Date lastModifyTime;
-    private String lastModifyUserName;
-    private String LastModifyWorkNo;
+    private Boolean isEnabled;
+
 
     public String getId() {
         return id;
@@ -96,62 +97,14 @@ public class OgProperty {
         isEnabled = enabled;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    @JsonIgnore
+    private List<OgUser> users;
+
+    public List<OgUser> getUsers() {
+        return users;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    public String getCreateWorkNo() {
-        return createWorkNo;
-    }
-
-    public void setCreateWorkNo(String createWorkNo) {
-        this.createWorkNo = createWorkNo;
-    }
-
-    public Date getLastModifyTime() {
-        return lastModifyTime;
-    }
-
-    public void setLastModifyTime(Date lastModifyTime) {
-        this.lastModifyTime = lastModifyTime;
-    }
-
-    public String getLastModifyUserName() {
-        return lastModifyUserName;
-    }
-
-    public void setLastModifyUserName(String lastModifyUserName) {
-        this.lastModifyUserName = lastModifyUserName;
-    }
-
-    public String getLastModifyWorkNo() {
-        return LastModifyWorkNo;
-    }
-
-    public void setLastModifyWorkNo(String lastModifyWorkNo) {
-        LastModifyWorkNo = lastModifyWorkNo;
-    }
-
-
-    private OgUser user;
-
-    public OgUser getUser() {
-        return user;
-    }
-
-    public void setUser(OgUser user) {
-        this.user = user;
+    public void setUsers(List<OgUser> users) {
+        this.users = users;
     }
 }

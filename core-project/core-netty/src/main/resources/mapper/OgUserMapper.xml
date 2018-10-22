@@ -5,17 +5,27 @@
     <resultMap id="userMapping" type="com.heyi.core.netty.domain.OgUser" autoMapping="true">
         <!--<constructor>
         </constructor>-->
-        <id property="id" column="Id"/>
+       <!-- <id property="id" column="Id"/>
         <result property="userName" column="UserName"/>
         <result property="workNo" column="WorkNo"/>
         <result property="sortIndex" column="SortIndex"/>
         <result property="birthday" column="Birthday"/>
-        <result property="createTime" column="CreateTime"/>
+        <result property="createTime" column="CreateTime"/>-->
         <!-- <association property=""></association>
-         <collection property=""></collection>
          <discriminator javaType="">
              <case value=""></case>
          </discriminator>-->
+        <association property="operationLog" javaType="com.heyi.core.netty.domain.OperationLog">
+            <result property="createTime" column="CreateTime"/>
+            <result property="createWorkNo" column="CreateWorkNo"/>
+            <result property="createUserName" column="CreateUserName"/>
+            <result property="lastModifyTime" column="LastModifyTime"/>
+            <result property="lastModifyWorkNo" column="LastModifyWorkNo"/>
+            <result property="lastModifyUserName" column="LastModifyUserName"/>
+        </association>
+        <collection property="properties" column="{userId=Id}" fetchType="lazy"
+                    select="com.heyi.core.netty.mapper.OgPropertyMapper.getPropertyByUserId">
+        </collection>
     </resultMap>
     <select id="getUserByUserId" resultMap="userMapping">
         SELECT * FROM sys_oguser WHERE id=#{userId} limit 1
@@ -127,15 +137,18 @@
         </foreach>
         WHERE Id=#{id}
     </update>
-
-    <update id="test">
+    <select id="getUserByPropertyId" resultType="com.heyi.core.netty.domain.OgUser" resultMap="userMapping">
+        SELECT * FROM sys_oguser a LEFT JOIN sys_oguserproperty o on a.Id = o.UserId
+        WHERE o.PropertyId=#{propertyId}
+    </select>
+   <!-- <update id="test">
         <if test="list!=null and list.size()>0 ">
 
         </if>
         <if test="@com.heyi.core.netty.common.StringHelper@isEmpty(userName)">
 
         </if>
-        <!--use <bind> print log-->
+        &lt;!&ndash;use <bind> print log&ndash;&gt;
         <bind name="pringLog" value="@com.heyi.core.netty.common.StringHelper@pringLog(_parameter)"/>
-    </update>
+    </update>-->
 </mapper>

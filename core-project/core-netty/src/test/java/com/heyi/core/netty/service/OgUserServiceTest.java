@@ -60,6 +60,8 @@ public class OgUserServiceTest {
         //Assert.assertEquals(true, user.getSex());
         //Assert.assertEquals("刘立军", user.getUserName());
         //Assert.assertEquals("llj", user.getWorkNo());
+        OgUser user1 = this.userService.getLastUser();
+        OgUser user2 = this.userService.getLastUser();
     }
 
     @Test

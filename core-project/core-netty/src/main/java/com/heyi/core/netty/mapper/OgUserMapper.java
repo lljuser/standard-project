@@ -45,4 +45,6 @@ public interface OgUserMapper {
     Integer batchSave(List<OgUser> list);
 
     Integer updateByMap(Map<String,Object> map);
+
+    List<OgUser> getUserByPropertyId(String propertyId);
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heyi.core.netty.mapper.OgPropertyMapper">
+    <resultMap id="ogPropertyMapping" type="com.heyi.core.netty.domain.OgProperty">
+        <collection property="users" column="{propertyId=id}" fetchType="lazy"
+                    select="com.heyi.core.netty.mapper.OgUserMapper.getUserByPropertyId"
+        />
+    </resultMap>
+    <select id="getPropertyByPropertyId" resultType="com.heyi.core.netty.domain.OgProperty" resultMap="ogPropertyMapping">
+        SELECT * FROM sys_ogproperty WHERE Id = #{propertyId}
+    </select>
+    <select id="getPropertyByUserId" resultType="com.heyi.core.netty.domain.OgProperty" resultMap="ogPropertyMapping">
+        SELECT * FROM sys_ogproperty a LEFT JOIN sys_oguserproperty o on a.Id = o.PropertyId
+        WHERE o.UserId=#{userId}
+    </select>
+</mapper>
