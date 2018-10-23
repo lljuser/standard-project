@@ -1,12 +1,15 @@
 package com.heyi.core.netty.mapper;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.github.pagehelper.PageRowBounds;
 import com.heyi.core.netty.AutoConfig;
 import com.heyi.core.netty.domain.OgUser;
+import org.apache.ibatis.session.RowBounds;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +21,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -65,5 +71,20 @@ public class OgUserMapperTest {
         OgUser user2= this.ogUserMapper.getUserByUserId("00000000-0000-0000-0000-000000000002");
         Assert.assertEquals(user.getId(),user1.getId());
         //Thread.sleep(10000);
+
+
+
+    }
+
+    @Test
+    public void getUserByPage(){
+        Map<String,Object> params=new HashMap<>();
+        params.put("offset",2);
+        params.put("limit",3);
+
+        List<OgUser> users =  this.ogUserMapper.getUserByPage(params);
+        System.out.println("--------"+ params.get("total"));
+        System.out.println("---------"+ users.size());
+        System.out.println(JSON.toJSONString(users));
     }
 }

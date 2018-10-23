@@ -6,6 +6,7 @@ import com.heyi.core.netty.model.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
@@ -47,4 +48,6 @@ public interface OgUserMapper {
     Integer updateByMap(Map<String,Object> map);
 
     List<OgUser> getUserByPropertyId(String propertyId);
+
+    List<OgUser> getUserByPage(Map<String,Object> params);
 }

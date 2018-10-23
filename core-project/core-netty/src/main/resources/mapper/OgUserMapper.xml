@@ -5,16 +5,16 @@
     <resultMap id="userMapping" type="com.heyi.core.netty.domain.OgUser" autoMapping="true">
         <!--<constructor>
         </constructor>-->
-       <!-- <id property="id" column="Id"/>
-        <result property="userName" column="UserName"/>
+        <id property="id" column="Id"/>
+        <!-- <result property="userName" column="UserName"/>
         <result property="workNo" column="WorkNo"/>
         <result property="sortIndex" column="SortIndex"/>
         <result property="birthday" column="Birthday"/>
         <result property="createTime" column="CreateTime"/>-->
-        <!-- <association property=""></association>
-         <discriminator javaType="">
-             <case value=""></case>
-         </discriminator>-->
+       <!-- <discriminator javaType="boolean">
+            <case value="true" resultMap=""/>
+            <case value="false" resultMap=""/>
+        </discriminator>-->
         <association property="operationLog" javaType="com.heyi.core.netty.domain.OperationLog">
             <result property="createTime" column="CreateTime"/>
             <result property="createWorkNo" column="CreateWorkNo"/>
@@ -23,6 +23,7 @@
             <result property="lastModifyWorkNo" column="LastModifyWorkNo"/>
             <result property="lastModifyUserName" column="LastModifyUserName"/>
         </association>
+        
         <collection property="properties" column="{userId=Id}" fetchType="lazy"
                     select="com.heyi.core.netty.mapper.OgPropertyMapper.getPropertyByUserId">
         </collection>
@@ -140,6 +141,14 @@
     <select id="getUserByPropertyId" resultType="com.heyi.core.netty.domain.OgUser" resultMap="userMapping">
         SELECT * FROM sys_oguser a LEFT JOIN sys_oguserproperty o on a.Id = o.UserId
         WHERE o.PropertyId=#{propertyId}
+    </select>
+    <select id="getUserByPage" statementType="CALLABLE" useCache="false"
+            resultType="com.heyi.core.netty.domain.OgUser">
+        {call proc_getuserbypage(
+            #{offset, mode=IN},
+            #{limit, mode=IN},
+            #{total, mode=OUT, jdbcType=BIGINT}
+        )}
     </select>
    <!-- <update id="test">
         <if test="list!=null and list.size()>0 ">

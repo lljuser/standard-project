@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,8 @@ import java.util.List;
  * @创建时间 2018/10/17
  * @修改人和其它信息
  */
-public class OgProperty extends OperationLog {
+public class OgProperty extends OperationLog implements Serializable {
+
     private String id;
     private String parentId;
     private String name;

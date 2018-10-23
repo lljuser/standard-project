@@ -32,13 +32,18 @@ public class OgPropertyMapperTest {
 
     @Test
     public void getPropertyByPropertyId() throws Exception{
-        OgProperty role = this.ogPropertyMapper.getPropertyByPropertyId("00000000-0000-0000-0000-000000000001");
+        String propertyId="00000000-0000-0000-0000-000000000001";
+        OgProperty role = this.ogPropertyMapper.getPropertyByPropertyId(propertyId);
         Assert.assertEquals("Root",role.getPropertyNo());
         System.out.println("-----------------------");
-        List<OgUser> users = role.getUsers();
+        //List<OgUser> users = role.getUsers();
         ObjectMapper objectMapper=new ObjectMapper();
-        objectMapper.writeValueAsString(users);
 
+        objectMapper.writeValueAsString(role);
+
+        System.out.println("-----------------------");
+        OgProperty role1 = this.ogPropertyMapper.getPropertyByPropertyId(propertyId);
+        objectMapper.writeValueAsString(role);
     }
 
     @Test

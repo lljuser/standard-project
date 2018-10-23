@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.mybatis.caches.redis.RedisCache;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -114,6 +115,7 @@ public class AutoConfig {
         Resource[] resources= resolver.getResources("classpath:mapper/*Mapper.xml");
         factoryBean.setMapperLocations(resources);
 
+        //factoryBean.setCache(redisCache());
         return factoryBean;
     }
 
@@ -125,4 +127,9 @@ public class AutoConfig {
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBean");
         mapperScannerConfigurer.setBasePackage("com.heyi.core.netty.mapper");
     }*/
+
+  /* @Bean
+    public RedisCache redisCache(){
+       return new RedisCache("myredis");
+   }*/
 }
