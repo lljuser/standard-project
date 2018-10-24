@@ -108,11 +108,11 @@ public class AutoConfig {
         /**使用默认的mybatics JdbcTransaction
          *使用spring事务 注释这段，会使用spring-mybatis的springmanagertransactionfactory
          **/
-/*        TransactionFactory transactionFactory=new JdbcTransactionFactory();
+        /*TransactionFactory transactionFactory=new JdbcTransactionFactory();
         factoryBean.setTransactionFactory(transactionFactory);*/
 
         //加载mybatis配置文件
-       /* Resource mybatisConfig=new DefaultResourceLoader().getResource("classpath:mybatis-config.xml");
+        /*Resource mybatisConfig=new DefaultResourceLoader().getResource("classpath:mybatis-config.xml");
         factoryBean.setConfigLocation(mybatisConfig);*/
 
 
