@@ -160,4 +160,7 @@
         &lt;!&ndash;use <bind> print log&ndash;&gt;
         <bind name="pringLog" value="@com.heyi.core.netty.common.StringHelper@pringLog(_parameter)"/>
     </update>-->
+    <select id="queryUsers" resultType="com.heyi.core.netty.domain.OgUser">
+        SELECT * FROM sys_oguser ORDER BY CreateTime desc
+    </select>
 </mapper>

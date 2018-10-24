@@ -2,9 +2,11 @@ package com.heyi.core.netty;
 
 import com.alibaba.druid.pool.DruidDataSource;
 
+import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.logging.log4j.Log4jImpl;
+import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.AutoMappingBehavior;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -99,6 +101,10 @@ public class AutoConfig {
         //configuration.addMappers("");
         factoryBean.setConfiguration(configuration);
 
+        //设置分页拦截插件plugin
+        PageInterceptor pageInterceptor=new PageInterceptor();
+        factoryBean.setPlugins(new Interceptor[]{pageInterceptor});
+
         /**使用默认的mybatics JdbcTransaction
          *使用spring事务 注释这段，会使用spring-mybatis的springmanagertransactionfactory
          **/
@@ -114,6 +120,9 @@ public class AutoConfig {
         ResourcePatternResolver resolver=new PathMatchingResourcePatternResolver();
         Resource[] resources= resolver.getResources("classpath:mapper/*Mapper.xml");
         factoryBean.setMapperLocations(resources);
+
+
+
 
         //factoryBean.setCache(redisCache());
         return factoryBean;
@@ -132,4 +141,6 @@ public class AutoConfig {
     public RedisCache redisCache(){
        return new RedisCache("myredis");
    }*/
+
+
 }

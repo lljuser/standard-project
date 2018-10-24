@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageRowBounds;
 import com.heyi.core.netty.AutoConfig;
 import com.heyi.core.netty.domain.OgUser;
@@ -21,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,5 +89,56 @@ public class OgUserMapperTest {
         System.out.println("--------"+ params.get("total"));
         System.out.println("---------"+ users.size());
         System.out.println(JSON.toJSONString(users));
+    }
+
+    @Test
+    public void queryUsers(){
+        int pageIndex=1;
+        int limit=3;
+        int offset=(pageIndex-1)*limit;
+
+        System.out.println("-------------------------------------");
+        PageRowBounds page=this.getPage(1);
+        List<OgUser> users=this.ogUserMapper.queryUsers(page);
+        System.out.println("总数"+page.getTotal()+":"+users.size());
+        users.forEach(o->System.out.println(o.getWorkNo()+":"+o.getCreateTime()));
+
+        System.out.println("-------------------------------------");
+        page=this.getPage(2);
+        users=this.ogUserMapper.queryUsers(page);
+        System.out.println("总数"+page.getTotal()+":"+users.size());
+        users.forEach(o->System.out.println(o.getWorkNo()+":"+o.getCreateTime()));
+
+        //无侵入式 对原有接口没有影响，无需增加分页参数
+        System.out.println("-------------------------------------");
+        PageHelper.startPage(1,10);
+        users = this.ogUserMapper.getAll();
+        System.out.println("总数"+page.getTotal()+":"+users.size());
+        users.forEach(o->System.out.println(o.getWorkNo()+":"+o.getCreateTime()));
+
+        System.out.println("-------------------------------------");
+        PageHelper.offsetPage(1,10);
+        users = this.ogUserMapper.getAll();
+        System.out.println("总数"+page.getTotal()+":"+users.size());
+        users.forEach(o->System.out.println(o.getWorkNo()+":"+o.getCreateTime()));
+
+
+        Page<OgUser> userList = PageHelper.startPage(2,5).doSelectPage(()->{
+            this.ogUserMapper.getAll();
+        });
+
+        List<OgUser> selectList = selectUsers();
+    }
+
+    private PageRowBounds getPage(Integer pageIndex){
+        int limit=5;
+        int offset=(pageIndex-1)*limit;
+        return new PageRowBounds(offset,limit);
+    }
+
+
+    public <E> List<E> selectUsers() {
+
+         return new ArrayList<>();
     }
 }

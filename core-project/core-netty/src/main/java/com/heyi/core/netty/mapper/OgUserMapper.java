@@ -4,6 +4,7 @@ import com.heyi.core.netty.domain.OgProperty;
 import com.heyi.core.netty.domain.OgUser;
 import com.heyi.core.netty.model.User;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
@@ -50,4 +51,6 @@ public interface OgUserMapper {
     List<OgUser> getUserByPropertyId(String propertyId);
 
     List<OgUser> getUserByPage(Map<String,Object> params);
+
+    List<OgUser> queryUsers(RowBounds page);
 }
