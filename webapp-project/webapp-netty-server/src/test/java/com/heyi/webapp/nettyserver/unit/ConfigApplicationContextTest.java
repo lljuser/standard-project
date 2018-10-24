@@ -33,7 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@TestExecutionListeners(listeners = {MyTestListener.class})
+//@TestExecutionListeners(listeners = {MyTestListener.class})  //自定义监听会覆盖默认的测试拦截，建议取消
 ////@ContextConfiguration(classes = MyConfig.class)  //if not spring-boot project use this
 //@Rollback
 //@Transactional

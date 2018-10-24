@@ -3,6 +3,9 @@ package com.heyi.webapp.nettyserver.unit;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
+/**
+ * 自定义监听测试拦截
+ * **/
 public class MyTestListener implements TestExecutionListener {
 
     @Override
