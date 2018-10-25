@@ -17,6 +17,10 @@ import java.util.List;
  */
 //@JsonFilter("myFilter")  //这种方法忽略很坑 objectMapper的时候一定要设置这个filter
 public class OgUser extends OperationLog {
+    static {
+        System.out.println("---con---");
+    }
+
     private String id;
     private String workNo;
     private String userName;
@@ -220,5 +224,13 @@ public class OgUser extends OperationLog {
 
     public void setOperationLog(OperationLog operationLog) {
         this.operationLog = operationLog;
+    }
+
+    public OgUser(){
+
+    }
+
+    public OgUser(String userName){
+        this.userName=userName;
     }
 }
