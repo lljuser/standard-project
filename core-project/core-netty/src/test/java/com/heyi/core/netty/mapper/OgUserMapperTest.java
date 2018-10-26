@@ -12,6 +12,7 @@ import com.github.pagehelper.PageRowBounds;
 import com.heyi.core.netty.AutoConfig;
 import com.heyi.core.netty.domain.OgProperty;
 import com.heyi.core.netty.domain.OgUser;
+import com.sun.org.apache.regexp.internal.REUtil;
 import org.apache.ibatis.session.RowBounds;
 import org.junit.Assert;
 import org.junit.Test;
@@ -141,12 +142,16 @@ public class OgUserMapperTest {
 
     @Test
     public void testE(){
-        List<OgUser> selectList = selectUsers();
-        List<OgProperty> list2=selectUsers();
+        List<OgUser> selectList = selectUsers(() -> {System.out.println("llj");return "llj";});
+
     }
 
-    public <E> List<E> selectUsers() {
-
+    public <E> List<E> selectUsers(IDo ido) {
+         ido.test();
          return new ArrayList<>();
+    }
+
+    static interface IDo{
+        String test();
     }
 }

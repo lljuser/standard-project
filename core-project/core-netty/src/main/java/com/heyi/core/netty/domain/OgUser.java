@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.util.Date;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @描述 com.heyi.core.netty.domain
@@ -232,5 +233,10 @@ public class OgUser extends OperationLog {
 
     public OgUser(String userName){
         this.userName=userName;
+    }
+
+
+    public void test(Consumer<OgUser> action){
+        action.accept(this);
     }
 }
