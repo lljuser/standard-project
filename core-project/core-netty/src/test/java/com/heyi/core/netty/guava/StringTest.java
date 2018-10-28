@@ -18,17 +18,12 @@ public class StringTest {
         System.out.println("---ctor---");
     }
 
-    {
-        System.out.println("---1---");
-    }
+
 
     public StringTest(){
         System.out.println("---test---");
     }
 
-    public <E> List<E> test4(){
-        return new ArrayList<>();
-    }
 
     @Test
     public void test1(){
@@ -61,40 +56,38 @@ public class StringTest {
 
     }
 
-    private void prvTest1(){
+    @Test
+    public void test3(){
+        StringBuffer sbf=new StringBuffer();
+        sbf.append("abc");
+        sbf.append("efg");
+
+        sbf.reverse();  //利用stack
+
+        System.out.println(sbf.toString());
+
+
+        String name="llj";
+
 
     }
-    protected void prvTest2(){
 
+
+
+    @Test
+    public void test5(){
+        String[] abc={"a","b"};
+        assert abc.length==3: "length is wrong";
+
+        System.out.println("------");
+        String name="llj";
+        System.out.println(name);
     }
 
-    public class StringTest1 extends StringTest{
-
-    }
-
-    private class StringTest2{
-
-    }
-
-    static class StringTest3 extends StringTest{
-        public StringTest3(){
-            System.out.println("-------test3---------");
-        }
-
-        public void test(){
-
-        }
-
-        @Override
-        public void test1() {
-            super.test1();
-        }
-
-        @Override
-        protected void prvTest2() {
-            super.prvTest2();
-        }
-
+    @Override
+    protected void finalize() throws Throwable {
+        System.out.println("this StringTest Object is gc collection");
+        super.finalize();
 
     }
 }

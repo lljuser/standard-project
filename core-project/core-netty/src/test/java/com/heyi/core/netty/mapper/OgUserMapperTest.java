@@ -142,6 +142,8 @@ public class OgUserMapperTest {
 
     @Test
     public void testE(){
+        String data = System.getProperty("dataSource.driver");
+        System.out.println(data);
         List<OgUser> selectList = selectUsers(() -> {System.out.println("llj");return "llj";});
 
     }

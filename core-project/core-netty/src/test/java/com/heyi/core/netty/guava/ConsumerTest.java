@@ -44,8 +44,7 @@ public class ConsumerTest {
 
         System.out.println(workNo);
 
-        StringTest.StringTest3 t3=new StringTest.StringTest3();
-        //tringTest.StringTest1 t1=new StringTest.StringTest1();
+
     }
 
     /**

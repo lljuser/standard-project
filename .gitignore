@@ -33,3 +33,4 @@ core-project/core-common/target/*
 target
 
 */.mvn/*
+**/**/.DS_Store
