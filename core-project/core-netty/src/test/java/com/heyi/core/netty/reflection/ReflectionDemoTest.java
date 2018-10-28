@@ -7,6 +7,7 @@ import org.junit.Test;
 import sun.reflect.Reflection;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.DriverManager;
 
@@ -49,6 +50,14 @@ public class ReflectionDemoTest {
             OgUser user= (OgUser)obj;
             System.out.println(user.getUserName());
         }
+
+        Field field=c.getDeclaredField("userName");
+        field.setAccessible(true);
+        field.set(obj,"cctv-setUserName");
+
+        String name=(String) field.get(obj);
+        System.out.println(name);
+
     }
 
     public static void main(String[] args) throws  Exception{
