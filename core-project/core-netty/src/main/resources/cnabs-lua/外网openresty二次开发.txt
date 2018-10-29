@@ -1,0 +1,28 @@
+脚本存放位置
+/usr/local/openresty/lualib/cnabs
+
+redis.lua 连接脚本
+config.lua 配置参数
+common.lua 公共方法脚本
+access_portal.lua 运维关闭网站【网站升级限制访问时，可打开这个脚本的注释】
+access_openresty.lua  ip限制提醒   
+content_openresty.lua 二次开发接口
+
+
+日期参数格式：yyyyMMddHHmm
+
+IP黑名单：
+IP地址刷新缓存：/openresty/ipblacklist/refresh/{date} 
+IP限制列表显示：/openresty/ipblacklist/getlist/{date} 
+
+用户分流假网站：
+用户缓存刷新：/openresty/fakeuserlist/refresh/{date}
+用户列表显示：/openresty/fakeuserlist/getlist/{date}
+
+
+
+阿里云redis:
+12号db库 key说明：
+
+cnabs_ipblacklist   IP黑名单KEY
+cnabs_fakeuserlist  用户分流假网站KEY
